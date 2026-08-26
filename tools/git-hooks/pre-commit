@@ -4,7 +4,7 @@
 # transient content out of the public history. Path-based by design.
 set -eu
 
-staged=$(git diff --cached --name-only --diff-filter=ACM)
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
 [ -z "$staged" ] && exit 0
 
 blocked=""
@@ -16,7 +16,7 @@ for f in $staged; do
     shared/TURN.lock)                          blocked="$blocked\n  [lockfile] $f" ;;
     .env.example|.env.sample|.env.template|*.env.example)  : ;;
     .env|.env.*|*.env|*.key|*.pem|*.p12)       blocked="$blocked\n  [secret]   $f" ;;
-    secrets/*)                                 blocked="$blocked\n  [secret]   $f" ;;
+    secrets/*|*/secrets/*)                     blocked="$blocked\n  [secret]   $f" ;;
   esac
 done
 

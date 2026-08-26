@@ -1,48 +1,58 @@
 #!/bin/sh
 # Good Bot commit-msg guard.
+#
+# Portable by design (GB-R002): uses ONLY shell builtins + git, never cat/sed/
+# tail/tr/grep, so it runs even when POSIX coreutils are not on PATH.
+#
 # 1) Require a valid `Agent:` trailer so every commit is attributable.
-# 2) Enforce directory ownership: an agent may not edit the OTHER agent's
-#    directory unless the commit acknowledges the crossing.
+# 2) Enforce directory ownership, including renames (GB-R003): an agent may not
+#    edit the OTHER agent's directory unless the commit acknowledges the crossing.
 set -eu
 
 msg_file="$1"
-msg=$(cat "$msg_file")
 
-# 1) Attribution trailer -------------------------------------------------------
-agent=$(printf '%s\n' "$msg" \
-  | sed -n 's/^Agent:[[:space:]]*\([A-Za-z][A-Za-z-]*\).*$/\1/p' \
-  | tail -n1 | tr 'A-Z' 'a-z')
+agent=""
+ack=0
+while IFS= read -r line || [ -n "$line" ]; do
+  case "$line" in
+    [Aa]gent:*)
+      rest=${line#*:}
+      while [ "${rest# }" != "$rest" ]; do rest=${rest# }; done  # ltrim spaces
+      rest=${rest%% *}    # first token only
+      rest=${rest%%(*}    # drop a "(model)" suffix
+      agent=$rest ;;
+    [Cc]ross-[Bb]oundary-[Aa]ck:*)
+      ack=1 ;;
+  esac
+done < "$msg_file"
+
+# A per-worktree identity, if configured, is authoritative for ownership.
+cfg_agent=$(git config --get goodbot.agent 2>/dev/null || true)
+[ -n "$cfg_agent" ] && agent=$cfg_agent
+
 case "$agent" in
-  claude|openai|shared) : ;;
+  claude|Claude|CLAUDE)            agent=claude ;;
+  openai|OpenAI|OPENAI|Openai)     agent=openai ;;
+  shared|Shared|SHARED)            agent=shared ;;
   *)
     echo "GoodBot commit-msg: missing or invalid 'Agent:' trailer." >&2
     echo "Add a trailer line:  Agent: claude   (or: openai / shared)" >&2
     exit 1 ;;
 esac
 
-# A per-worktree identity, if configured, is authoritative for ownership.
-cfg_agent=$(git config --get goodbot.agent 2>/dev/null || true)
-[ -n "$cfg_agent" ] && agent=$(printf '%s' "$cfg_agent" | tr 'A-Z' 'a-z')
-
-# 2) Directory ownership -------------------------------------------------------
-staged=$(git diff --cached --name-only --diff-filter=ACM)
-crossing=""
-for f in $staged; do
+# Ownership check over Added/Copied/Modified/Renamed destinations.
+crossed=""
+for f in $(git diff --cached --name-only --diff-filter=ACMR); do
   case "$agent:$f" in
-    claude:openai/*) crossing="$crossing\n  $f" ;;
-    openai:claude/*) crossing="$crossing\n  $f" ;;
+    claude:openai/*) crossed="$crossed $f" ;;
+    openai:claude/*) crossed="$crossed $f" ;;
   esac
 done
 
-if [ -n "$crossing" ]; then
-  if printf '%s\n' "$msg" | grep -qi '^Cross-Boundary-Ack:'; then
-    exit 0   # explicitly acknowledged crossing is allowed
-  fi
+if [ -n "$crossed" ] && [ "$ack" -eq 0 ]; then
   echo "GoodBot commit-msg: '$agent' is editing the other agent's directory:" >&2
-  printf '%b\n' "$crossing" >&2
-  echo "" >&2
-  echo "Per COLLABORATION.md, note it in shared/HANDOFF.md and add a trailer:" >&2
-  echo "  Cross-Boundary-Ack: <reason or HANDOFF reference>" >&2
+  for f in $crossed; do echo "  $f" >&2; done
+  echo "Note it in shared/HANDOFF.md and add:  Cross-Boundary-Ack: <reason>" >&2
   exit 1
 fi
 exit 0

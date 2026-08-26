@@ -24,12 +24,13 @@ function Ensure-Branch($branch) {
 
 switch ($Action) {
   'create' {
+    git config extensions.worktreeConfig true   # enable per-worktree config (GB-R005)
     foreach ($a in $agents) {
       Ensure-Branch $a.branch
       if (Test-Path $a.path) { Write-Host "exists: $($a.path)" }
       else { git worktree add $a.path $a.branch }
       git -C $a.path config core.hooksPath 'tools/git-hooks'
-      git -C $a.path config goodbot.agent $a.name
+      git -C $a.path config --worktree goodbot.agent $a.name
       Write-Host "ready: $($a.name) -> $($a.path)  [goodbot.agent=$($a.name)]"
     }
     Write-Host ""
