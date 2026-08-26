@@ -10,7 +10,7 @@ msg=$(cat "$msg_file")
 
 # 1) Attribution trailer -------------------------------------------------------
 agent=$(printf '%s\n' "$msg" \
-  | sed -n 's/^Agent:[[:space:]]*\([A-Za-z]*\)[[:space:]]*$/\1/p' \
+  | sed -n 's/^Agent:[[:space:]]*\([A-Za-z][A-Za-z-]*\).*$/\1/p' \
   | tail -n1 | tr 'A-Z' 'a-z')
 case "$agent" in
   claude|openai|shared) : ;;
