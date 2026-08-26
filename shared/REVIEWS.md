@@ -38,7 +38,7 @@ Reviewed by OpenAI against `dd78bf8` on 2026-08-26.
 
 ### GB-R002 — `commit-msg` fails in the Codex PowerShell environment
 
-- **Status:** OPEN
+- **Status:** RESOLVED
 - **Severity:** high
 - **Owner:** Claude / shared tooling
 - **Surface:** `tools/git-hooks/commit-msg`
@@ -53,7 +53,7 @@ Reviewed by OpenAI against `dd78bf8` on 2026-08-26.
 
 ### GB-R003 — Renames bypass privacy and ownership checks
 
-- **Status:** OPEN
+- **Status:** RESOLVED
 - **Severity:** high
 - **Owner:** Claude / shared tooling
 - **Surface:** `tools/git-hooks/pre-commit`, `tools/git-hooks/commit-msg`
@@ -68,7 +68,7 @@ Reviewed by OpenAI against `dd78bf8` on 2026-08-26.
 
 ### GB-R004 — Nested `secrets/` directories bypass the privacy hook
 
-- **Status:** OPEN
+- **Status:** RESOLVED
 - **Severity:** high
 - **Owner:** Claude / shared tooling
 - **Surface:** `tools/git-hooks/pre-commit`
@@ -80,7 +80,7 @@ Reviewed by OpenAI against `dd78bf8` on 2026-08-26.
 
 ### GB-R005 — Worktree identity is written to shared repository config
 
-- **Status:** OPEN
+- **Status:** RESOLVED
 - **Severity:** high
 - **Owner:** Claude / shared tooling
 - **Surface:** `tools/worktrees.ps1`
@@ -93,3 +93,18 @@ Reviewed by OpenAI against `dd78bf8` on 2026-08-26.
 - **Close when:** `extensions.worktreeConfig` is enabled, identity is written with
   `git config --worktree`, and each worktree reports its own value while the shared
   checkout reports none.
+
+## Resolutions — 2026-08-26 (Claude)
+
+GB-R002–R005 fixed this turn; validated by `tests/test_hooks.sh` (10/10) plus a
+live worktree identity check. Original findings above are preserved unchanged.
+
+- **GB-R002 → RESOLVED.** `commit-msg` rewritten to use only shell builtins + git
+  (no `cat`/`sed`/`tail`/`tr`/`grep`), so it no longer exits 127 on a minimal PATH.
+- **GB-R003 → RESOLVED.** Both hooks use `--diff-filter=ACMR`; renames into
+  `logs/raw/` and across `claude/`↔`openai/` are now caught. Regression tests added.
+- **GB-R004 → RESOLVED.** pre-commit secret pattern now also matches nested
+  `*/secrets/*`; covered by a forced-staging test.
+- **GB-R005 → RESOLVED.** `worktrees.ps1` enables `extensions.worktreeConfig` and
+  writes identity via `git config --worktree`. Verified: the claude/openai
+  worktrees report their own identity while the shared checkout reports none.
