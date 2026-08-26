@@ -98,7 +98,7 @@ class TranscriptAdminTests(unittest.TestCase):
     def test_secret_scan_blocks_credentials(self) -> None:
         with self.assertRaisesRegex(ValueError, "API key"):
             transcript_admin.scan_for_secrets(
-                [{"text": "sk-1234567890abcdefghijklmnop"}]
+                [{"text": "sk-" + ("x" * 24)}]
             )
 
 
