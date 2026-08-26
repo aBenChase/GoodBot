@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-26T16:35:21.715Z",
+  "agent": "claude",
+  "model": "claude-opus-4-8",
+  "turnHash": "fd138b44a28742a4",
+  "role": "assistant",
+  "contentSha256": "6ced3060a6225f8a6ff90a7200d4ffd7a8e67c681f7331666279de4d6339a71e",
+  "publicationStatus": "awaiting-review"
+}
