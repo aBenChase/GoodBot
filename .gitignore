@@ -11,9 +11,19 @@ secrets/
 private/
 **/private/
 
-# --- Raw, unredacted logs (staging area before curation) ---
+# --- Raw / in-progress logs: FULL CONTENT, never committed ---
 logs/raw/
 logs/review/
+# legacy alias for logs/raw, kept ignored defensively:
+logs/staging/
+# NOTE: logs/receipts/ and logs/published/ are intentionally TRACKED.
+#   receipts  = SHA-256 hashes + timestamps only (no content) -- the audit layer.
+#   published = human-reviewed, redacted records for the website.
+
+# --- Transient coordination state (never committed) ---
+shared/TURN.lock
+queue/pending/*.json
+queue/done/*.json
 
 # --- Node / Next.js ---
 node_modules/
