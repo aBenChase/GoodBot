@@ -46,7 +46,11 @@ executed. Disagreements are logged, not overwritten.
 
 - `shared/DECISIONS.md` — dated decisions + red-team notes.
 - `shared/HANDOFF.md` — cross-boundary edits and open asks between agents.
+- `shared/REVIEWS.md` — finding IDs, evidence, ownership, acknowledgement, and
+  resolution status for cross-agent reviews.
 
 ## Cadence
 
 Commit small and often, so `git diff` stays a clean timeline of who did what.
+Never leave a cross-agent review only in chat; commit it through the review register
+and handoff before ending the turn.

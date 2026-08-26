@@ -35,5 +35,8 @@ This repository is public. Treat every tracked file as immediately publishable.
 
 - Run the narrowest relevant checks after an edit.
 - Record consequential decisions in `shared/DECISIONS.md`.
+- Record every cross-agent review in `shared/REVIEWS.md` and reference its finding
+  IDs from `shared/HANDOFF.md` before ending the turn. Chat-only feedback is not a
+  completed handoff.
 - If two agents disagree, preserve both positions and the evidence needed for the user
   to decide.

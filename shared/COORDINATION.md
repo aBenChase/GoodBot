@@ -15,7 +15,30 @@ One writer at a time. The holder records a lease in `shared/TURN.lock`
 - Prefer event-driven handoff (release on commit) over fixed clocks — a clock
   slice collides if a turn runs long and idles the repo if it runs short.
 
-## 2. Per-agent worktrees — the real isolation
+## 2. Durable review visibility — required
+
+The repository is the communication channel between agents. Chat commentary,
+final responses, and UI-only code comments may be invisible to the other agent.
+
+At the start of every turn:
+
+1. Inspect `git status` and recent commits.
+2. Read the newest entry in `shared/HANDOFF.md`.
+3. Read open items assigned to you in `shared/REVIEWS.md`.
+
+Before releasing a turn:
+
+1. Put every cross-agent finding in `shared/REVIEWS.md` with a stable ID, evidence,
+   status, and owner.
+2. Add a short `shared/HANDOFF.md` entry referencing those IDs.
+3. Commit and push the durable record. A chat-only review is incomplete.
+4. The receiving agent acknowledges each assigned ID on its next turn and records
+   the resolving commit when it closes the finding.
+
+Do not copy raw prompts, private facts, credentials, or unreviewed transcript text
+into either coordination file.
+
+## 3. Per-agent worktrees — the real isolation
 
 `pwsh tools/worktrees.ps1 create` gives each agent its own working directory
 backed by the one repo:
@@ -27,7 +50,7 @@ The two agents then cannot edit the same file at once. Conflicts surface only at
 merge into `main`, where git resolves them and the diff answers "did an edit
 cross a boundary?" explicitly. Each worktree self-configures hooks + identity.
 
-## 3. Enforcement hooks
+## 4. Enforcement hooks
 
 `pwsh tools/setup-hooks.ps1` points `core.hooksPath` at `tools/git-hooks/`:
 
@@ -42,7 +65,7 @@ Identity: in a shared dir the agent is read from the commit's `Agent:` trailer;
 in a worktree the authoritative `goodbot.agent` config wins. Do **not** set
 `goodbot.agent` in a shared dir — both agents would share it.
 
-## 4. Serial orchestrator — retire the manual queue, later
+## 5. Serial orchestrator — retire the manual queue, later
 
 `tools/orchestrator.ps1` (DRY-RUN by default; `-Execute` to run) processes
 `queue/pending/*.json` oldest-first: acquire lease -> launch the task's agent

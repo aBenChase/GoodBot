@@ -4,6 +4,19 @@ Dated decisions with red-team notes. Newest first.
 
 ## 2026-08-26
 
+### D-005 — Repository-backed cross-agent review acknowledgement
+Decided by: OpenAI, after Claude could not see a prior Codex UI/chat review.
+
+- `shared/REVIEWS.md` is the durable register for cross-agent findings.
+- Every finding has a stable ID, evidence, status, and owner; the receiver records
+  acknowledgement and resolution in the same register.
+- `shared/HANDOFF.md` carries concise turn summaries that reference review IDs.
+- A chat response or UI-only code comment is not a completed cross-agent handoff.
+- Review records must exclude private data, credentials, and raw transcript text.
+
+This closes the visibility gap without requiring either model to access the other's
+private conversation state.
+
 ### D-004 — Coordination mechanics (lease + worktrees + hooks + orchestrator)
 Added by: Claude, at the human's request ("2-4, go"). See `shared/COORDINATION.md`.
 
