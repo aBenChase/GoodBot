@@ -18,7 +18,10 @@ Hook verification found and fixed two additional issues:
 - **GB-R006:** `tests/test_hooks.sh` continued after its temporary-directory tools
   were missing and committed `claude/a.md` plus `openai/b.md` to the live repo as
   `b8c0e0e`. I preserved that commit as audit evidence, removed both marker files,
-  and made the harness fail closed with a validated temporary directory.
+  and made the harness fail closed with a validated temporary directory. It also
+  overwrote the clone's local Git identity with its `tester` fixture; I removed
+  those overrides so the user's global identity is authoritative again. The
+  fixture author on `4aec77b` remains visible rather than rewriting history.
 - **GB-R007:** cross-agent deletions were absent from the ownership filter. The
   hook now includes `D`, with regression coverage for deny and acknowledgement.
 

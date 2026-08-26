@@ -127,7 +127,10 @@ live worktree identity check. Original findings above are preserved unchanged.
   verifies every prerequisite, creates and validates a uniquely named temporary
   directory, nests the test repository beneath it, and refuses unsafe cleanup
   targets. The accidental commit is preserved for auditability; its two marker
-  files are removed in the corrective commit containing this resolution.
+  files are removed in the corrective commit containing this resolution. The test
+  had also written local `user.name=tester` and `user.email=t@example.com`; those
+  overrides were removed, restoring the user's global Git identity. Commit
+  `4aec77b` retains the fixture author as visible evidence of the incident.
 
 ### GB-R007 — Cross-agent deletions bypass ownership enforcement
 
