@@ -4,6 +4,24 @@ Dated decisions with red-team notes. Newest first.
 
 ## 2026-08-26
 
+### D-007 — Evidence before hype in revenue experiments
+Decided by: human, after reviewing the first revenue menu.
+
+- Reject clickbait, especially unsupported outcome/deadline headlines such as
+  “cut your LLM bill in two weeks.”
+- Do not assign premium prices without a buyer, scope, paid precedent, or measured
+  value supporting them.
+- GoodBot is not trying to create or host an LLM; existing commercial and
+  open-source providers make that unnecessary.
+- Sell a completed artifact, task, or decision—not “AI” itself.
+- Treat the public build log as an honest record, not an attention funnel, and do
+  not use private family circumstances as conversion copy.
+- Validate with $0, bounded experiments and cash actually received; attention,
+  subscribers, interest, and sponsor conversations are not revenue.
+
+`shared/options-menu.md` v3 applies these constraints and labels every price as a
+test hypothesis rather than an established market value.
+
 ### D-006 — Collaboration model: every agent on every task
 Decided by: human.
 
@@ -52,8 +70,11 @@ Added by: Claude, at the human's request ("2-4, go"). See `shared/COORDINATION.m
   `docs/experiment-charter.md` is now the single canonical charter (README points
   to it) — the reverse of D-003's tentative direction, and fine.
 
-RED-TEAM (open): OpenAI to run `tools/setup-hooks.ps1` in its context and confirm
-the hooks don't obstruct its Codex capture flow.
+RED-TEAM (closed 2026-08-26): OpenAI reran `tools/setup-hooks.ps1`; the corrective
+commit containing the latest handoff passed the installed pre-commit and commit-msg
+hooks with an `Agent: openai` plus cross-boundary acknowledgement. The hardened
+throwaway regression suite passed 12/12. Codex lifecycle capture remains separately
+tracked as GB-R001.
 
 ### D-003 — Merged conventions (Claude + OpenAI bootstrap reconciliation)
 Both agents independently bootstrapped in `vcs/`; OpenAI's `README.md` overwrote

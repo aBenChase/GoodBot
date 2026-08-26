@@ -1,90 +1,159 @@
-# Income options menu (v2 — shared)
+# Revenue options menu (v3 — evidence before hype)
 
-_Shared artifact: every agent **creates, challenges, and reviews** it (per D-006).
-Claude drafted v2 — OpenAI, please challenge the weak plays and add your own via
-`shared/REVIEWS.md` or an "## OpenAI additions" section._
+_Shared artifact: OpenAI and Anthropic both create, challenge, and review it under
+D-006. Prices below are test hypotheses, not established market value or revenue
+forecasts._
 
-_Not financial advice. Success = **net** profit after all costs; $100 at-risk cap;
-each play needs a hypothesis, cost ceiling, and stop condition before any spend._
+## Binding product and marketing constraints
 
-## The core insight
+- Do not promise an outcome or deadline before we have independently reproducible
+  evidence. “Cut your bill in two weeks” is not acceptable positioning.
+- Do not sell “AI” as the value. Sell a specific artifact, completed task, or
+  decision that a buyer already needs.
+- Do not manufacture a case study, imply a synthetic result was real, or turn the
+  family's medical circumstances into conversion copy.
+- Do not assume the project will create or host an LLM. Excellent commercial and
+  open-source model providers already exist; competing with them is outside scope.
+- Do not build a product before observing buyer demand. A reusable tool should
+  emerge from repeated paid work, not precede it.
+- Count net cash, agent/API cost, and human time. Attention is not revenue.
 
-The most specific, defensible plays **productize what GoodBot already is** — a
-transparent multi-agent system where several models create/challenge/review the
-same work. That is simultaneously the marketing asset and the product prototype.
-Your 20 years of architecture + strong writing are the human engine.
+## Reassessment of v2
 
-## Mode key
-🟢 hands-off (build once, AI runs it) · 🟡 light (you write / QA) ·
-🔵 client-facing (calls, scoping)
+| Prior play | Verdict | Reason |
+|---|---|---|
+| P1 — GoodBot Kit | Keep as infrastructure, not a revenue forecast | Coordination code is useful proof, but templates and agent workflows are easy to copy. No buyer or distribution has been validated. |
+| P2 — Build log | Keep as the honest public record | It may create trust, but “flywheel,” subscriber, and sponsorship assumptions are unproven. Publish when there is something worth learning, not to feed an algorithm. |
+| P3 — Multi-agent code review | Reject as a generic service; narrow it | GitHub already offers Copilot code review and CodeRabbit offers automated review from free/open-source tiers through paid plans. “More models” is not enough differentiation. |
+| P4 — LLM cost audit | Reject | The headline is clickbait, the $3–10k price has no evidence, native providers already expose caching/batching/cost controls, and the premise does not fit this project. |
+| P5 — Multi-Agent Playbook | Defer | A guide about an experiment with no commercial result is a souvenir, not yet a product. Revisit only after the process produces verified outcomes. |
 
-## The plays
+## Better candidates
 
-### P1 — "GoodBot Kit": open-source the coordination system, monetize the edges · 🟢
-- **Offer:** package the hooks + worktrees + review register + capture/receipts +
-  orchestrator as a public repo, a **GitHub Action for multi-agent PR review**, and
-  a paid "pro" template.
-- **Buyer:** devs/teams running multi-model workflows.
-- **Price:** OSS free (funnel) → template $49–99 · Action freemium / GitHub Sponsors.
-- **First 3:** (1) extract to a `goodbot-kit` repo; (2) 90-sec demo + README;
-  (3) Show HN + dev.to launch.
-- **Odds/risk:** medium — OSS monetization is slow; needs P2 for reach.
+### O1 — Paid open-source issue or documentation bounty · mostly agent-executed
 
-### P2 — The build-log content engine · 🟡  ← the flywheel
-- **Offer:** a written series, *"Two rival AIs on one repo, in public."* Launch
-  essay + weekly logs (the collision, the red-team, D-005, the money experiment).
-- **Channels:** Show HN, dev.to, Hashnode, LinkedIn; capture to a Beehiiv/Substack
-  newsletter hosted off the DO droplet.
-- **Money:** newsletter sponsorships (dev-tools) at ~1–2k subs; affiliate; funnels
-  into P1/P3/P5.
-- **First 3:** (1) publish the launch essay this week; (2) stand up newsletter
-  capture; (3) Show HN linking the public repo.
-- **Odds:** high for attention (HN-native story), medium for direct $. Feeds all.
+- **Buyer/payment event:** a maintainer posts a fixed reward; payment follows an
+  accepted contribution.
+- **Why it is authentic:** the work and acceptance criterion are public. Revenue
+  comes from completing a named task, not attracting an audience.
+- **Current evidence:** Algora supports outcome-based GitHub issue payments, but
+  current inventory is sparse and many visible rewards are only tens or hundreds
+  of dollars. This is a first-dollar test, not the care-fund strategy.
+- **First test:** identify ten currently open, authorized tasks; score fit, reward,
+  estimated agent cost, maintainer activity, and ambiguity; ask the human to approve
+  one claim/submission.
+- **Cost/stop:** $0 platform spend; stop a task at four agent-hours or when its
+  acceptance criteria cannot be reproduced locally.
+- **Metric:** bounty actually paid minus model cost and payment fees.
 
-### P3 — Productized multi-agent code/architecture review · 🔵  ← fastest real cash
-- **Offer:** send a repo/PR → a report where multiple models create/challenge/
-  review, with the audit trail. Deliverable: prioritized findings + a 30-min call.
-- **Buyer:** seed/Series-A teams short on senior review bandwidth; OSS maintainers.
-- **Price:** $299–999 per review, or $1–3k/mo retainer.
-- **First 3:** (1) 5 free reviews for named OSS projects → testimonials + public
-  samples; (2) one-page site + intake form; (3) 20 warm outreach from your network.
-- **Odds:** medium-high — clear ROI + your credibility + the live demo.
+### O2 — Repository clarity pack · asynchronous service
 
-### P4 — LLM cost-optimization audit · 🔵
-- **Offer:** *"Cut your LLM bill in 2 weeks."* Audit caching / model-routing /
-  batching / retrieval; deliver a report + a PR implementing the top wins.
-- **Buyer:** companies with visible LLM spend (Series A–C).
-- **Price:** $3–10k fixed, or % of first-year savings.
-- **First 3:** (1) a teardown post ("how we cut X's bill 60%", real or synthetic);
-  (2) 3 free mini-audits for case studies; (3) outbound to CTOs you know.
-- **Odds:** high ROI/margin; sales-heavy.
+- **Buyer:** a small dev-tool company or maintained open-source project preparing
+  to onboard contributors, hand off ownership, or ship a release.
+- **Artifact:** verified setup instructions, architecture map, dependency and
+  runbook gaps, one end-to-end tutorial, and a prioritized documentation patch.
+- **Why it may sell:** the buyer receives maintainable repository artifacts and
+  recovered engineering context. AI is production leverage, not the pitch.
+- **Pilot price hypothesis:** $300–750 fixed after one public sample; never five
+  unpaid custom reviews.
+- **Cost/stop:** no paid tools; cap the sample at eight agent-hours and two human QA
+  hours. Stop if ten qualified prospects produce no paid pilot.
+- **Metric:** paid pilot, effective net hourly return, and whether the buyer merges
+  or uses the artifacts.
 
-### P5 — "The Multi-Agent Playbook" (digital product) · 🟢
-- **Offer:** a paid guide + template distilling the patterns (protocol, hooks,
-  red-team register, privacy pipeline).
-- **Price:** $29–79.
-- **First 3:** (1) outline from the repo's own docs; (2) Gumroad listing;
-  (3) launch via P2's audience.
-- **Odds:** medium; rides P2.
+### O3 — Bounded architecture decision memo · asynchronous expert product
 
-## Avoid (charter + bad math)
-Trading/crypto bots, dropshipping, SEO/content farms, affiliate spam. High failure,
-thin/negative net margin, and they break our own honesty rules.
+- **Buyer:** a small software team facing one concrete choice: migration sequence,
+  vendor selection, integration boundary, deployment design, or build-vs-buy.
+- **Artifact:** assumptions, cited evidence, option matrix, failure modes,
+  recommendation, and explicit unknowns. No implementation promise.
+- **Why it fits:** it uses the human's architecture judgment and writing while the
+  agents gather evidence, challenge assumptions, and draft the memo.
+- **Pilot price hypothesis:** $350–900 for a tightly scoped decision; raise it only
+  after buyers pay and report useful outcomes.
+- **Cost/stop:** no spend; decline decisions requiring regulated legal, medical, or
+  financial advice. Stop the offer after three qualified rejections on value.
+- **Metric:** net payment, turnaround time, and buyer-reported decision usefulness.
 
-## Recommended sequence
-- **Now / Bucket A cash:** **P2** (≈$0, starts the flywheel) + **P3** (fastest
-  credible cash). If you'll do client work, **P4** is the highest $/hr.
-- **Compounding / Bucket B:** **P1** and **P5**, launched off P2's audience.
+### O4 — Engineering handoff / recovery pack · higher-value, human-reviewed
 
-## The decision this resolves
-Pick 1–2 plays to start — your pick implicitly answers "hands-off vs client-facing":
-- all-🟢 (P1/P5) = fully hands-off, slower, lower odds;
-- add 🟡 P2 = you write, and it multiplies everything;
-- add 🔵 P3/P4 = fastest real money, needs some of your time on calls.
+- **Buyer:** a founder or small agency inheriting a codebase from a departing team.
+- **Artifact:** build/deploy verification, system map, operational unknowns,
+  critical dependency risks, missing-access checklist, and a 30-day stabilization
+  sequence.
+- **Why it may sell:** the triggering event already has urgency and a concrete cost;
+  the deliverable reduces uncertainty without claiming to replace engineers.
+- **Pilot price hypothesis:** $750–1,500 for a small repository with a strict scope.
+- **Risks:** private-code handling, credentials, liability, and unavoidable human
+  review. This requires a written data-handling procedure before a pilot.
+- **Metric:** paid pilot, hours consumed, defects found by the buyer, and follow-on
+  work requested without outbound hype.
 
-## First experiment (concrete)
-> **Hypothesis:** a P2 launch essay + a P3 free-review offer lands **1 paid review
-> or 1 sponsor conversation within 30 days.**
-> **Cost:** ≤ $30 (domain + newsletter free tier).
-> **Stop:** no serious lead by day 21 → revise the offer or switch play.
-> **Metric:** net cash collected.
+### O5 — Reproducible technical tutorial or integration guide · writing-led
+
+- **Buyer:** a developer-tools company with a product that works but lacks a tested
+  path for a specific framework or use case.
+- **Artifact:** working sample repository, cited tutorial, version-pinned setup, and
+  automated verification—not generic SEO copy or undisclosed advocacy.
+- **Pilot price hypothesis:** $400–1,000 depending on integration depth.
+- **Why it fits:** combines architecture, implementation, and clear writing. Public
+  bounty history also shows that maintainers pay for concrete tutorials, though
+  individual bounty amounts are generally modest.
+- **Cost/stop:** no spend; do not publish a positive opinion the evidence does not
+  support. Stop after one sample and ten qualified pitches without a paid pilot.
+- **Metric:** net payment, sample reproducibility, and actual developer usage when
+  the buyer can measure it.
+
+### O6 — Productize only the repeated step · later scaling path
+
+Do not choose a micro-SaaS idea now. After at least three paid O2–O5 engagements,
+inspect which step buyers repeatedly pay to avoid. Only then test a narrow tool,
+with pre-commitments or paid pilots before a build. GoodBot Kit can supply pieces;
+it is not automatically the product.
+
+## Authentic public communication
+
+The public log should sound like an engineering notebook, not a funnel. Useful
+titles describe what happened:
+
+- “Our hook test committed to the live repo; here is why.”
+- “Two agents proposed five businesses. The human rejected the weakest premise.”
+- “What the first paid task cost in model tokens and human minutes.”
+
+No manufactured urgency, inflated savings claim, teaser gap, or medical-story bait.
+If plain language earns less attention, that is an acceptable constraint.
+
+## Recommended first validation
+
+Run two $0 lanes for at most 30 days:
+
+1. **Agent-led lane:** inventory current paid OSS tasks and request approval to
+   attempt one whose acceptance test is clear. This tests whether the agents can
+   earn a first dollar with almost no marketing.
+2. **Higher-ceiling lane:** create one public O2 sample for a suitable repository,
+   then offer exactly one paid pilot at a stated fixed scope and price. Any outreach
+   or account creation requires the human's approval first.
+
+Success is cash actually received or a signed paid pilot—not views, subscribers,
+“interest,” or a sponsor conversation. Failure is also useful: record the time and
+cost, close the lane, and do not rescue it with louder marketing.
+
+None of these options is presently evidenced as a path to $30,000 per year. The
+point of the first validation is to discover a credible transaction, then measure
+whether it repeats.
+
+## Current-source checks (2026-08-26)
+
+- [Algora pricing](https://algora.io/pricing/) — outcome-based GitHub issue
+  payments; contributors receive posted rewards when work is accepted.
+- [Algora community examples](https://algora.io/algora/bounties/community) and
+  [LabLab.ai examples](https://algora.io/lablab-ai/home) — visible rewards and
+  current inventory illustrate the modest, variable bounty ceiling.
+- [GitHub Copilot code review](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review)
+  and [CodeRabbit plans](https://docs.coderabbit.ai/management/plans) — generic AI
+  review is already a well-supplied category.
+- [OpenAI prompt caching](https://developers.openai.com/api/docs/guides/latest-model)
+  — provider-native cost controls make generic optimization advice easier to obtain.
+- [GitHub Sponsors fees](https://docs.github.com/en/sponsors/sponsoring-open-source-contributors/about-sponsorships-fees-and-taxes)
+  — a payment rail for valued open-source work, not evidence that sponsors will
+  appear.

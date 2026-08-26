@@ -108,3 +108,66 @@ live worktree identity check. Original findings above are preserved unchanged.
 - **GB-R005 → RESOLVED.** `worktrees.ps1` enables `extensions.worktreeConfig` and
   writes identity via `git config --worktree`. Verified: the claude/openai
   worktrees report their own identity while the shared checkout reports none.
+
+## Findings — 2026-08-26 (OpenAI follow-up)
+
+### GB-R006 — Hook regression test can fall back to the live repository
+
+- **Status:** RESOLVED
+- **Severity:** critical
+- **Owner:** OpenAI / shared tooling
+- **Surface:** `tests/test_hooks.sh`
+- **Evidence:** In the Codex PowerShell environment, Git's `sh` started without
+  `dirname`, `mktemp`, `mkdir`, or `rm` on `PATH`. The script continued after
+  setup failed, used the live checkout, created commit `b8c0e0e` with
+  `claude/a.md` and `openai/b.md`, and ran its reset/clean helper there.
+- **Impact:** A test intended to protect repository boundaries could mutate or
+  remove untracked files from the real checkout.
+- **Resolution:** The test now adds Git for Windows' bundled tool directories,
+  verifies every prerequisite, creates and validates a uniquely named temporary
+  directory, nests the test repository beneath it, and refuses unsafe cleanup
+  targets. The accidental commit is preserved for auditability; its two marker
+  files are removed in the corrective commit containing this resolution.
+
+### GB-R007 — Cross-agent deletions bypass ownership enforcement
+
+- **Status:** RESOLVED
+- **Severity:** high
+- **Owner:** OpenAI / shared tooling
+- **Surface:** `tools/git-hooks/commit-msg`, `tests/test_hooks.sh`
+- **Evidence:** The ownership hook used `--diff-filter=ACMR`, so deleting a file
+  owned by the other agent was not inspected.
+- **Impact:** An agent could silently delete the other agent's tracked work without
+  a `Cross-Boundary-Ack` trailer.
+- **Resolution:** The ownership filter now includes `D`; regression coverage proves
+  cross-agent deletion is blocked without acknowledgement and allowed with it.
+
+### GB-R008 — Revenue menu used an unsupported, clickbait cost-savings offer
+
+- **Status:** RESOLVED
+- **Severity:** high
+- **Owner:** shared
+- **Surface:** `shared/options-menu.md`
+- **Human feedback:** “Cut your LLM bill in 2 weeks” feels like clickbait; the
+  proposed $3–10k price lacks a viable sales basis; building or hosting an LLM is
+  outside the intended project and unnecessary given strong existing providers.
+- **Evidence:** The v2 offer had no paid case study, buyer interview, measured
+  savings baseline, or scope supporting either its outcome promise or price.
+  Provider-native caching and batching also make generic cost advice readily
+  available.
+- **Resolution:** V3 rejects P4, prohibits unverified outcome/deadline claims and
+  synthetic case studies, and replaces AI-centric pitches with specific paid
+  artifacts and low-cost validation steps.
+
+### GB-R009 — Generic multi-agent code review is not differentiated
+
+- **Status:** RESOLVED
+- **Severity:** medium
+- **Owner:** shared
+- **Surface:** `shared/options-menu.md`
+- **Evidence:** GitHub offers Copilot code review, while CodeRabbit offers automated
+  PR review with free/open-source and paid tiers. Multiple models and an audit trail
+  do not alone support a $299–999 review price.
+- **Resolution:** V3 rejects the generic offer and narrows the candidate service to
+  repository clarity, decision, and handoff artifacts whose value is the completed
+  engineering work and human-reviewed judgment.

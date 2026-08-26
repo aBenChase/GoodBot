@@ -4,10 +4,51 @@
 # Runs in a throwaway repo so it never touches the real index.
 set -u
 
-HOOKS_DIR=$(cd "$(dirname "$0")/../tools/git-hooks" && pwd)
-tmp=$(mktemp -d)
-trap 'rm -rf "$tmp"' EXIT
-cd "$tmp" || exit 9
+# Git for Windows can launch sh without its Unix utilities on PATH. Add only the
+# bundled locations that exist, then fail closed before touching Git if any test
+# prerequisite is still unavailable.
+for bin_dir in /usr/bin /mingw64/bin /bin; do
+  [ -d "$bin_dir" ] && PATH="$bin_dir:$PATH"
+done
+export PATH
+
+for required in dirname mktemp mkdir rm; do
+  command -v "$required" >/dev/null 2>&1 || {
+    echo "test setup failed: required command not found: $required" >&2
+    exit 9
+  }
+done
+
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P) || exit 9
+SOURCE_REPO=$(cd "$SCRIPT_DIR/.." && pwd -P) || exit 9
+HOOKS_DIR="$SOURCE_REPO/tools/git-hooks"
+tmp=$(mktemp -d "${TMPDIR:-/tmp}/goodbot-hooks.XXXXXX") || exit 9
+tmp=$(cd "$tmp" && pwd -P) || exit 9
+
+case "$tmp" in
+  ""|/|"$SOURCE_REPO")
+    echo "test setup failed: unsafe temporary directory: $tmp" >&2
+    exit 9 ;;
+  */goodbot-hooks.*) : ;;
+  *)
+    echo "test setup failed: unexpected temporary directory: $tmp" >&2
+    exit 9 ;;
+esac
+
+cleanup() {
+  case "$tmp" in
+    */goodbot-hooks.*)
+      # Git for Windows cannot reliably remove the directory containing its cwd.
+      cd / || return 1
+      rm -rf -- "$tmp" ;;
+    *) echo "refusing unsafe cleanup target: $tmp" >&2; return 1 ;;
+  esac
+}
+trap cleanup EXIT
+
+repo="$tmp/repo"
+mkdir "$repo" || exit 9
+cd "$repo" || exit 9
 
 git init -q
 git config core.hooksPath "$HOOKS_DIR"
@@ -51,6 +92,17 @@ Agent: claude')"
 check "GB-R003 same rename allowed with ack" 0 "$(commitmsg 'x
 
 Agent: claude
+Cross-Boundary-Ack: test')"
+reset_repo
+
+# --- ownership: deletion of the other agent's file is also a crossing ---
+git rm -q claude/a.md
+check "cross-agent deletion blocked for openai" 1 "$(commitmsg 'x
+
+Agent: openai')"
+check "cross-agent deletion allowed with ack" 0 "$(commitmsg 'x
+
+Agent: openai
 Cross-Boundary-Ack: test')"
 reset_repo
 

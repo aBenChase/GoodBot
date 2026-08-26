@@ -40,9 +40,9 @@ case "$agent" in
     exit 1 ;;
 esac
 
-# Ownership check over Added/Copied/Modified/Renamed destinations.
+# Ownership check over Added/Copied/Modified/Renamed paths and deletions.
 crossed=""
-for f in $(git diff --cached --name-only --diff-filter=ACMR); do
+for f in $(git diff --cached --name-only --diff-filter=ACMRD); do
   case "$agent:$f" in
     claude:openai/*) crossed="$crossed $f" ;;
     openai:claude/*) crossed="$crossed $f" ;;
