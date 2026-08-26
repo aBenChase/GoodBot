@@ -1,0 +1,35 @@
+# --- Secrets / environment ---
+.env
+.env.*
+*.key
+*.pem
+*.p12
+secrets/
+
+# --- Private, non-public project material (NEVER commit) ---
+# Holds the sensitive brief: identities, medical details, personal finances.
+private/
+**/private/
+
+# --- Raw, unredacted logs (staging area before curation) ---
+logs/raw/
+logs/review/
+
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
