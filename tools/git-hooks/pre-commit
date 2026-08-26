@@ -1,0 +1,30 @@
+#!/bin/sh
+# Good Bot pre-commit guard.
+# Backstop (even against `git add -f`) that keeps sensitive, raw, secret, or
+# transient content out of the public history. Path-based by design.
+set -eu
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+blocked=""
+for f in $staged; do
+  case "$f" in
+    private/*|*/private/*)                     blocked="$blocked\n  [private]  $f" ;;
+    logs/raw/*|logs/review/*|logs/staging/*)   blocked="$blocked\n  [raw-log]  $f" ;;
+    queue/pending/*.json|queue/done/*.json)    blocked="$blocked\n  [queue]    $f" ;;
+    shared/TURN.lock)                          blocked="$blocked\n  [lockfile] $f" ;;
+    .env|.env.*|*.env|*.key|*.pem|*.p12)       blocked="$blocked\n  [secret]   $f" ;;
+    secrets/*)                                 blocked="$blocked\n  [secret]   $f" ;;
+  esac
+done
+
+if [ -n "$blocked" ]; then
+  echo "GoodBot pre-commit: refusing to commit protected paths:" >&2
+  printf '%b\n' "$blocked" >&2
+  echo "" >&2
+  echo "These must never enter the public repo. Unstage them:" >&2
+  echo "  git restore --staged <file>" >&2
+  exit 1
+fi
+exit 0

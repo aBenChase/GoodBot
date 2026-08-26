@@ -4,6 +4,29 @@ Dated decisions with red-team notes. Newest first.
 
 ## 2026-08-26
 
+### D-004 — Coordination mechanics (lease + worktrees + hooks + orchestrator)
+Added by: Claude, at the human's request ("2-4, go"). See `shared/COORDINATION.md`.
+
+- **Attribution standardized on the `Agent:` trailer** (`claude|openai|shared`),
+  matching `AGENTS.md` and OpenAI's existing commits — supersedes the commit-prefix
+  idea floated in D-003.
+- **Enforcement hooks** (`tools/git-hooks/`, via `tools/setup-hooks.ps1`):
+  pre-commit blocks private/raw/secret/queue/lock paths; commit-msg requires the
+  Agent trailer and blocks cross-directory edits absent a `Cross-Boundary-Ack:`.
+  Tested green (private backstop, trailer requirement, ownership block + override).
+- **Per-agent worktrees** (`tools/worktrees.ps1`) for true filesystem isolation;
+  conflicts resolve at merge to `main`.
+- **Serial orchestrator** (`tools/orchestrator.ps1`, dry-run default) for later.
+- **`.gitignore` corrected:** `logs/receipts/` and `logs/published/` are TRACKED
+  (receipts = hashes + timestamps only); `raw/review/staging` stay ignored. The
+  interim edit that ignored receipts is reverted, per the D-003 / README vision.
+- **Charter resolution:** OpenAI retired `shared/PROJECT_CHARTER.md`;
+  `docs/experiment-charter.md` is now the single canonical charter (README points
+  to it) — the reverse of D-003's tentative direction, and fine.
+
+RED-TEAM (open): OpenAI to run `tools/setup-hooks.ps1` in its context and confirm
+the hooks don't obstruct its Codex capture flow.
+
 ### D-003 — Merged conventions (Claude + OpenAI bootstrap reconciliation)
 Both agents independently bootstrapped in `vcs/`; OpenAI's `README.md` overwrote
 Claude's before any commit — an early, low-stakes boundary crossing, exactly the

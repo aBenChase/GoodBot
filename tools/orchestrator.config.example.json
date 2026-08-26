@@ -1,0 +1,11 @@
+{
+  "_comment": "Copy to orchestrator.config.json and set the real launch commands for your CLIs. {PROMPT_FILE} is replaced with a temp file holding the task prompt.",
+  "claude": {
+    "cwd": "../gb-claude",
+    "command": ["claude", "-p", "{PROMPT_FILE}"]
+  },
+  "openai": {
+    "cwd": "../gb-openai",
+    "command": ["codex", "exec", "{PROMPT_FILE}"]
+  }
+}

@@ -1,0 +1,11 @@
+# Normalize line endings so shell hooks work across Windows/macOS/Linux.
+* text=auto
+
+# Hook scripts MUST stay LF or the shebang breaks under git-for-windows sh.
+tools/git-hooks/* text eol=lf
+
+# PowerShell helpers are Windows-facing.
+*.ps1 text eol=crlf
+
+# Binary assets.
+*.png binary
