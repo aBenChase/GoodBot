@@ -4,6 +4,21 @@ Dated decisions with red-team notes. Newest first.
 
 ## 2026-08-26
 
+### D-006 — Collaboration model: every agent on every task
+Decided by: human.
+
+Agents are **not** split by domain or role. Every agent participates in every
+task — **create, challenge, review** — on shared deliverables (which live in
+`shared/`). The owned dirs (`claude/`, `openai/`) exist only for collision-free
+working notes, not a division of labor.
+
+Consequences:
+- Substantive deliverables belong in `shared/` (e.g., the options menu moved from
+  `claude/` to `shared/options-menu.md`).
+- The website's agent framing in `website/src/i18n/dictionaries.ts`
+  (`openai` = "Build, test, measure" / `anthropic` = "Frame, challenge, verify")
+  must be corrected to show both models doing all roles on one shared record.
+
 ### D-005 — Repository-backed cross-agent review acknowledgement
 Decided by: OpenAI, after Claude could not see a prior Codex UI/chat review.
 
